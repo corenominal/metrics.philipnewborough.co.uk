@@ -1,16 +1,20 @@
 /* global Chart */
 
-// ── Sidebar active link ────────────────────────────────────────────────────
+// ── Sidebar active links ───────────────────────────────────────────────────
 document.addEventListener("DOMContentLoaded", function () {
+    const path = window.location.pathname;
+
     document.querySelectorAll("#sidebar .nav-link").forEach((link) => {
-        if (link.getAttribute("href") === "/admin") {
+        const href = link.getAttribute("href");
+        if (!href) return;
+        if (path === href || (path.startsWith("/admin/metrics") && href.startsWith("/admin/metrics") && path.startsWith(href))) {
             link.classList.remove("text-white-50");
             link.classList.add("active");
         }
     });
 });
 
-// ── Charts ─────────────────────────────────────────────────────────────────
+// ── Domain page chart ──────────────────────────────────────────────────────
 document.addEventListener("DOMContentLoaded", function () {
     const dataEl = document.getElementById("dashboard-data");
     if (!dataEl) return;
@@ -22,14 +26,12 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
     }
 
-    const gridColor  = "rgba(255,255,255,0.07)";
-    const tickColor  = "rgba(255,255,255,0.4)";
-    const lineColor  = "rgba(255,211,0,0.9)";
-    const fillColor  = "rgba(255,211,0,0.15)";
+    const gridColor = "rgba(255,255,255,0.07)";
+    const tickColor = "rgba(255,255,255,0.4)";
 
-    // ── Hits over 30 days line chart ───────────────────────────────────────
+    // Hits line chart (domain drill-down)
     const hitsCanvas = document.getElementById("hits-chart");
-    if (hitsCanvas) {
+    if (hitsCanvas && data.hitsLabels) {
         new Chart(hitsCanvas, {
             type: "line",
             data: {
@@ -38,8 +40,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     label: "Hits",
                     data: data.hitsValues,
                     fill: true,
-                    borderColor: lineColor,
-                    backgroundColor: fillColor,
+                    borderColor: "rgba(13,202,240,0.9)",
+                    backgroundColor: "rgba(13,202,240,0.12)",
                     borderWidth: 2,
                     pointRadius: 3,
                     pointHoverRadius: 5,
@@ -68,7 +70,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // ── Device type doughnut chart ─────────────────────────────────────────
+    // Device doughnut chart
     const deviceCanvas = document.getElementById("device-chart");
     if (deviceCanvas && data.deviceLabels && data.deviceLabels.length) {
         const DEVICE_COLOURS = {
@@ -81,14 +83,13 @@ document.addEventListener("DOMContentLoaded", function () {
             (l) => DEVICE_COLOURS[l.toLowerCase()] || "rgba(108,117,125,0.85)"
         );
 
-        // Colour the legend dots that were rendered server-side
         document.querySelectorAll(".device-legend-dot").forEach((dot) => {
             const c = DEVICE_COLOURS[dot.dataset.device?.toLowerCase()] || "rgba(108,117,125,0.85)";
             dot.style.backgroundColor = c;
-            dot.style.width  = "10px";
-            dot.style.height = "10px";
+            dot.style.width     = "10px";
+            dot.style.height    = "10px";
             dot.style.flexShrink = "0";
-            dot.style.display = "inline-block";
+            dot.style.display  = "inline-block";
         });
 
         new Chart(deviceCanvas, {
@@ -116,4 +117,3 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 });
-

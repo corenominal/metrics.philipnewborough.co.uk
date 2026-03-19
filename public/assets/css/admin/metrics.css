@@ -1,0 +1,18 @@
+/* ── Metrics pages ──────────────────────────────────────────────────────── */
+.stat-card__value {
+    font-variant-numeric: tabular-nums;
+}
+
+.dashboard__device-chart-wrap {
+    flex-shrink: 0;
+}
+
+.card .table {
+    --bs-table-bg: transparent;
+    --bs-table-hover-bg: rgba(255, 255, 255, 0.04);
+}
+
+/* Keep font-monospace readable at small size */
+.font-monospace.small {
+    font-size: 0.78em;
+}

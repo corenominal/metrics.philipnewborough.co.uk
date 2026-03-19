@@ -32,6 +32,9 @@
         <script defer src="<?= config('Urls')->assets ?>assets/js/vendor/datatables.min.js"></script>
         <script defer src="<?= config('Urls')->assets ?>assets/js/vendor/datatables.bootstrap5.min.js"></script>
         <?php endif; ?>
+        <?php if(isset($chartjs) && $chartjs): ?>
+        <script defer src="/assets/js/vendor/chart.min.js"></script>
+        <?php endif; ?>
         <!-- JavaScript Local -->
         <script defer src="/assets/js/templates/dashboard.js"></script>
         <?php if(isset($js)): foreach ($js as $file): $jsPath = FCPATH . 'assets/js/' . $file . '.js'; ?>
@@ -105,14 +108,6 @@
                 <div class="offcanvas-body p-0 d-flex flex-column">
                     <nav class="flex-grow-1 py-3" aria-label="Sidebar navigation">
 
-                        <ul class="nav flex-column mb-3">
-                            <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center gap-2 text-white-50 px-3 py-2 active" href="/">
-                                    <i class="bi bi-speedometer2"></i> Dashboard
-                                </a>
-                            </li>
-                        </ul>
-
                         <?php // is_admin session is set and true
                         if( session()->get('is_admin') ):
                         ?>
@@ -121,6 +116,19 @@
                             <li class="nav-item">
                                 <a class="nav-link d-flex align-items-center gap-2 text-white-50 px-3 py-2" href="/admin">
                                     <i class="bi bi-speedometer2"></i> Dashboard
+                                </a>
+                            </li>
+                        </ul>
+                        <p class="px-3 mb-1 text-uppercase fw-semibold text-secondary sidebar-section-label">Metrics</p>
+                        <ul class="nav flex-column mb-3">
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center gap-2 text-white-50 px-3 py-2" href="/admin/metrics">
+                                    <i class="bi bi-list-ul"></i> Hit Log
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center gap-2 text-white-50 px-3 py-2" href="/admin/metrics/domains">
+                                    <i class="bi bi-globe2"></i> Domains
                                 </a>
                             </li>
                         </ul>

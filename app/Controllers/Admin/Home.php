@@ -4,30 +4,30 @@ namespace App\Controllers\Admin;
 
 use Hermawan\DataTables\DataTable;
 use App\Models\ExampleModel;
+use App\Models\MetricsModel;
 
 class Home extends BaseController
 {
     /**
-     * Display the Admin Dashboard page.
-     *
-     * Prepares view data for the dashboard, including:
-     * - Datatables feature flag
-     * - JavaScript asset list
-     * - CSS asset list
-     * - Page title
-     *
-     * @return string Rendered admin dashboard view output.
+     * Display the Admin Dashboard page with metrics data.
      */
-    public function index()
+    public function index(): string
     {
-        // Datatables flag
-        $data['datatables'] = true;
-        // Array of javascript files to include
-        $data['js'] = ['admin/home'];
-        // Array of CSS files to include
-        $data['css'] = ['admin/home'];
-        // Set the page title
-        $data['title'] = 'Admin Dashboard';    
+        $model = new MetricsModel();
+
+        $data['hit_counts']       = $model->getHitCounts();
+        $data['unique_counts']    = $model->getUniqueVisitorCounts();
+        $data['hits_by_day']      = $model->getHitsByDay(30);
+        $data['top_domains']      = $model->getTopDomains(10);
+        $data['top_paths']        = $model->getTopPaths(10);
+        $data['latest_hits']      = $model->getLatestHits(15);
+        $data['device_breakdown'] = $model->getDeviceBreakdown();
+        $data['load_time_stats']  = $model->getLoadTimeStats();
+        $data['chartjs']          = true;
+        $data['js']               = ['admin/home'];
+        $data['css']              = ['admin/home'];
+        $data['title']            = 'Admin Dashboard';
+
         return view('admin/home', $data);
     }
 
@@ -89,3 +89,4 @@ class Home extends BaseController
         ]);
     }
 }
+

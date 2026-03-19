@@ -1,0 +1,15 @@
+/* ── Stat cards ─────────────────────────────────────────────────────────── */
+.stat-card__value {
+    font-variant-numeric: tabular-nums;
+}
+
+/* ── Device chart ───────────────────────────────────────────────────────── */
+.dashboard__device-chart-wrap {
+    flex-shrink: 0;
+}
+
+/* ── Card tables ────────────────────────────────────────────────────────── */
+.card .table {
+    --bs-table-bg: transparent;
+    --bs-table-hover-bg: rgba(255, 255, 255, 0.04);
+}

@@ -11,9 +11,13 @@ $routes->get('/', 'Home::index');
 $routes->get('/admin', 'Admin\Home::index');
 $routes->get('/admin/datatable', 'Admin\Home::datatable');
 $routes->post('/admin/delete', 'Admin\Home::delete');
+$routes->get('/admin/metrics', 'Admin\Metrics::index');
+$routes->get('/admin/metrics/domains', 'Admin\Metrics::domains');
+$routes->get('/admin/metrics/domain/(:any)', 'Admin\Metrics::domain/$1');
 
 // API routes
 $routes->match(['get', 'options'], '/api/test/ping', 'Api\Test::ping');
+$routes->match(['post', 'options'], '/api/metrics/receive', 'Api\Metrics::receive');
 
 // Command line routes
 $routes->cli('cli/test/index/(:segment)', 'CLI\Test::index/$1');

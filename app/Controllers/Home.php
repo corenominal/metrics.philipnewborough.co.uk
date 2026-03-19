@@ -2,24 +2,13 @@
 
 namespace App\Controllers;
 
+use CodeIgniter\HTTP\RedirectResponse;
+
 class Home extends BaseController
 {
-    /**
-     * Display the home page
-     *
-     * Renders the home view with associated stylesheets and scripts.
-     * Sets up the page title and passes data to the view layer.
-     *
-     * @return string The rendered home view
-     */
-    public function index(): string
+    public function index(): RedirectResponse
     {
-        // Array of javascript files to include
-        $data['js'] = ['home'];
-        // Array of CSS files to include
-        $data['css'] = ['home'];
-        // Set the page title
-        $data['title'] = 'Template Home';
-        return view('home', $data);
+        // Redirect to admin dashboard if user is logged in
+        return redirect()->to('/admin');
     }
 }

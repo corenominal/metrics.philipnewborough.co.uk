@@ -38,6 +38,13 @@ class Metrics extends BaseController
                 ->setJSON(['error' => $validation->getErrors()]);
         }
 
+        // If is_admin do not log the visit
+        if (isset($json['is_admin']) && $json['is_admin'] == 1) {
+            return $this->response
+                ->setStatusCode(200)
+                ->setJSON(['status' => 'admin visit - not logged']);
+        }
+
         $model = new MetricsModel();
 
         $data = [

@@ -1,0 +1,5 @@
+/* ── Reset page ──────────────────────────────────────────────────────────── */
+.reset-page__phrase-input::placeholder {
+    font-family: var(--bs-font-monospace);
+    opacity: 0.4;
+}

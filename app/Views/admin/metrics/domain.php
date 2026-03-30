@@ -142,7 +142,7 @@ $totalHits = $hit_counts['total'];
                                     <td class="text-end pe-3">
                                         <div class="d-flex align-items-center justify-content-end gap-1">
                                             <div class="progress flex-grow-1" style="height:5px;min-width:40px">
-                                                <div class="progress-bar bg-info" style="width:<?= $pct ?>%"></div>
+                                                <div class="progress-bar bg-primary" style="width:<?= $pct ?>%"></div>
                                             </div>
                                             <span class="text-secondary small" style="min-width:3rem;text-align:right">
                                                 <?= $pct ?>%

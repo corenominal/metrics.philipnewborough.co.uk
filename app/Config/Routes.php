@@ -20,6 +20,7 @@ $routes->post('/admin/reset', 'Admin\Reset::reset');
 // API routes
 $routes->match(['get', 'options'], '/api/test/ping', 'Api\Test::ping');
 $routes->match(['post', 'options'], '/api/metrics/receive', 'Api\Metrics::receive');
+$routes->match(['post', 'options'], '/api/metrics/receivepwa', 'Api\Metrics::receivePwa');
 
 // Command line routes
 $routes->cli('cli/test/index/(:segment)', 'CLI\Test::index/$1');

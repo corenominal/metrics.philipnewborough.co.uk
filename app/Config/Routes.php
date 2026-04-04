@@ -18,9 +18,9 @@ $routes->get('/admin/reset', 'Admin\Reset::index');
 $routes->post('/admin/reset', 'Admin\Reset::reset');
 
 // API routes
-$routes->match(['get', 'options'], '/api/test/ping', 'Api\Test::ping');
-$routes->match(['post', 'options'], '/api/metrics/receive', 'Api\Metrics::receive');
-$routes->match(['post', 'options'], '/api/metrics/receivepwa', 'Api\Metrics::receivePwa');
+$routes->match(['get', 'options'], '/api/test/ping', 'Api\Test::ping', ['filter' => 'apifilter']);
+$routes->match(['post', 'options'], '/api/metrics/receive', 'Api\Metrics::receive', ['filter' => 'apifilter']);
+$routes->match(['post', 'options'], '/api/metrics/receivepwa', 'Api\Metrics::receivePwa', ['filter' => 'optionalapifilter']);
 
 // Command line routes
 $routes->cli('cli/test/index/(:segment)', 'CLI\Test::index/$1');

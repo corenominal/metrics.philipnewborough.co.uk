@@ -146,7 +146,6 @@ class Filters extends BaseFilters
      */
     public array $filters = [
         'optionalauthfilter' => ['before' => self::OPTIONAL_AUTH_ROUTES],
-        'apifilter'          => ['before' => ['api/*', 'api'], 'except' => ['api/metrics/receivepwa']],
         'optionalapifilter'  => ['before' => ['api/metrics/receivepwa']],
         'debugfilter'        => ['before' => ['debug/*', 'debug']],
         'adminfilter'        => ['before' => ['admin/*', 'admin']],

@@ -117,3 +117,45 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 });
+
+// ── Delete domain records ──────────────────────────────────────────────────
+document.addEventListener("DOMContentLoaded", function () {
+    const triggerBtn  = document.getElementById("delete-domain-btn");
+    const confirmBtn  = document.getElementById("delete-domain-confirm-btn");
+    const modalEl     = document.getElementById("delete-domain-modal");
+    if (!triggerBtn || !confirmBtn || !modalEl) return;
+
+    // eslint-disable-next-line no-undef
+    const modal = new bootstrap.Modal(modalEl);
+
+    triggerBtn.addEventListener("click", function () {
+        modal.show();
+    });
+
+    confirmBtn.addEventListener("click", function () {
+        const url = triggerBtn.dataset.url;
+
+        confirmBtn.disabled = true;
+        confirmBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> Deleting…';
+
+        fetch(url, {
+            method: "POST",
+            headers: { "X-Requested-With": "XMLHttpRequest" },
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                if (data.status === "success") {
+                    window.location.href = "/admin/metrics/domains";
+                } else {
+                    modal.hide();
+                    confirmBtn.disabled = false;
+                    confirmBtn.innerHTML = '<i class="bi bi-trash me-1"></i> Delete All Records';
+                }
+            })
+            .catch(() => {
+                modal.hide();
+                confirmBtn.disabled = false;
+                confirmBtn.innerHTML = '<i class="bi bi-trash me-1"></i> Delete All Records';
+            });
+    });
+});

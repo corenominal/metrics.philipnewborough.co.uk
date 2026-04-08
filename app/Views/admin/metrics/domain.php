@@ -30,6 +30,13 @@ $totalHits = $hit_counts['total'];
                class="btn btn-sm btn-outline-secondary">
                 <i class="bi bi-list-ul me-1"></i> Full Hit Log
             </a>
+            <button type="button"
+                    class="btn btn-sm btn-outline-danger ms-2"
+                    id="delete-domain-btn"
+                    data-domain="<?= esc($domain) ?>"
+                    data-url="/admin/metrics/domain/<?= urlencode($domain) ?>/delete">
+                <i class="bi bi-trash me-1"></i> Delete All Records
+            </button>
         </div>
     </div>
 
@@ -228,6 +235,31 @@ $totalHits = $hit_counts['total'];
         </div>
     </div>
 
+</div>
+
+<!-- Delete domain confirmation modal -->
+<div class="modal fade" id="delete-domain-modal" tabindex="-1" aria-labelledby="delete-domain-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark">
+            <div class="modal-header">
+                <h5 class="modal-title" id="delete-domain-modal-label">
+                    <i class="bi bi-trash me-2 text-danger"></i>Delete All Records
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>You are about to permanently delete all <strong><?= number_format($hit_counts['total']) ?> hit record<?= $hit_counts['total'] !== 1 ? 's' : '' ?></strong> for:</p>
+                <p class="font-monospace bg-dark-subtle rounded px-3 py-2 mb-3"><?= esc($domain) ?></p>
+                <p class="mb-0 text-danger-emphasis">This will remove all associated paths, device data, user agents, and timestamps for this domain. <strong>This action cannot be undone.</strong></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="delete-domain-confirm-btn">
+                    <i class="bi bi-trash me-1"></i> Delete All Records
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- Embed chart data for JavaScript -->

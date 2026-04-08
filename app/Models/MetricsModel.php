@@ -273,4 +273,14 @@ class MetricsModel extends Model
             SELECT DISTINCT device_type FROM metrics ORDER BY device_type ASC
         ")->getResultArray();
     }
+
+    /**
+     * Delete all records for a given domain.
+     */
+    public function deleteByDomain(string $domain): int
+    {
+        $this->db->table('metrics')->where('domain', $domain)->delete();
+
+        return $this->db->affectedRows();
+    }
 }

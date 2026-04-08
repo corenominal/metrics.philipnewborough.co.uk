@@ -85,4 +85,19 @@ class Metrics extends BaseController
 
         return view('admin/metrics/domain', $data);
     }
+
+    /**
+     * Delete all records for a given domain.
+     */
+    public function deleteDomain(string $domain)
+    {
+        $domain  = urldecode($domain);
+        $model   = new MetricsModel();
+        $deleted = $model->deleteByDomain($domain);
+
+        return $this->response->setJSON([
+            'status'  => 'success',
+            'deleted' => $deleted,
+        ]);
+    }
 }

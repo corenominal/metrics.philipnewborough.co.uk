@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll("#sidebar .nav-link").forEach((link) => {
         const href = link.getAttribute("href");
         if (!href) return;
-        if (path === href || (path.startsWith("/admin/metrics") && href.startsWith("/admin/metrics") && path.startsWith(href))) {
+        if (path === href || (path.startsWith("/admin/metrics/domain") && href === "/admin/metrics/domains")) {
             link.classList.remove("text-white-50");
             link.classList.add("active");
         }

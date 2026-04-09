@@ -33,16 +33,21 @@ class MetricsModel extends Model
      */
     public function getHitCounts(): array
     {
+        $today     = date('Y-m-d');
+        $yesterday = date('Y-m-d', strtotime('-1 day'));
+        $year      = (int) date('Y');
+        $month     = (int) date('n');
+
         $row = $this->db->query("
             SELECT
-                SUM(DATE(created_at) = CURDATE()) AS today,
-                SUM(DATE(created_at) = CURDATE() - INTERVAL 1 DAY) AS yesterday,
-                SUM(YEARWEEK(created_at, 1) = YEARWEEK(NOW(), 1)) AS this_week,
-                SUM(YEAR(created_at) = YEAR(NOW()) AND MONTH(created_at) = MONTH(NOW())) AS this_month,
-                SUM(YEAR(created_at) = YEAR(NOW())) AS this_year,
+                SUM(DATE(created_at) = ?) AS today,
+                SUM(DATE(created_at) = ?) AS yesterday,
+                SUM(YEARWEEK(created_at, 1) = YEARWEEK(?, 1)) AS this_week,
+                SUM(YEAR(created_at) = ? AND MONTH(created_at) = ?) AS this_month,
+                SUM(YEAR(created_at) = ?) AS this_year,
                 COUNT(*) AS total
             FROM metrics
-        ")->getRowArray();
+        ", [$today, $yesterday, $today, $year, $month, $year])->getRowArray();
 
         return [
             'today'      => (int) ($row['today'] ?? 0),
@@ -59,14 +64,18 @@ class MetricsModel extends Model
      */
     public function getUniqueVisitorCounts(): array
     {
+        $today = date('Y-m-d');
+        $year  = (int) date('Y');
+        $month = (int) date('n');
+
         $row = $this->db->query("
             SELECT
-                COUNT(DISTINCT CASE WHEN DATE(created_at) = CURDATE() THEN anonymized_ip END) AS today,
-                COUNT(DISTINCT CASE WHEN YEARWEEK(created_at, 1) = YEARWEEK(NOW(), 1) THEN anonymized_ip END) AS this_week,
-                COUNT(DISTINCT CASE WHEN YEAR(created_at) = YEAR(NOW()) AND MONTH(created_at) = MONTH(NOW()) THEN anonymized_ip END) AS this_month,
+                COUNT(DISTINCT CASE WHEN DATE(created_at) = ? THEN anonymized_ip END) AS today,
+                COUNT(DISTINCT CASE WHEN YEARWEEK(created_at, 1) = YEARWEEK(?, 1) THEN anonymized_ip END) AS this_week,
+                COUNT(DISTINCT CASE WHEN YEAR(created_at) = ? AND MONTH(created_at) = ? THEN anonymized_ip END) AS this_month,
                 COUNT(DISTINCT anonymized_ip) AS total
             FROM metrics
-        ")->getRowArray();
+        ", [$today, $today, $year, $month])->getRowArray();
 
         return [
             'today'      => (int) ($row['today'] ?? 0),
@@ -81,13 +90,15 @@ class MetricsModel extends Model
      */
     public function getHitsByDay(int $days = 30): array
     {
+        $cutoff = date('Y-m-d', strtotime("-{$days} days"));
+
         $rows = $this->db->query("
             SELECT DATE(created_at) AS day, COUNT(*) AS hits
             FROM metrics
-            WHERE created_at >= CURDATE() - INTERVAL ? DAY
+            WHERE DATE(created_at) >= ?
             GROUP BY DATE(created_at)
             ORDER BY day ASC
-        ", [$days])->getResultArray();
+        ", [$cutoff])->getResultArray();
 
         $result = [];
         for ($i = $days - 1; $i >= 0; $i--) {
@@ -192,17 +203,22 @@ class MetricsModel extends Model
      */
     public function getDomainHitCounts(string $domain): array
     {
+        $today     = date('Y-m-d');
+        $yesterday = date('Y-m-d', strtotime('-1 day'));
+        $year      = (int) date('Y');
+        $month     = (int) date('n');
+
         $row = $this->db->query("
             SELECT
-                SUM(DATE(created_at) = CURDATE()) AS today,
-                SUM(DATE(created_at) = CURDATE() - INTERVAL 1 DAY) AS yesterday,
-                SUM(YEARWEEK(created_at, 1) = YEARWEEK(NOW(), 1)) AS this_week,
-                SUM(YEAR(created_at) = YEAR(NOW()) AND MONTH(created_at) = MONTH(NOW())) AS this_month,
-                SUM(YEAR(created_at) = YEAR(NOW())) AS this_year,
+                SUM(DATE(created_at) = ?) AS today,
+                SUM(DATE(created_at) = ?) AS yesterday,
+                SUM(YEARWEEK(created_at, 1) = YEARWEEK(?, 1)) AS this_week,
+                SUM(YEAR(created_at) = ? AND MONTH(created_at) = ?) AS this_month,
+                SUM(YEAR(created_at) = ?) AS this_year,
                 COUNT(*) AS total
             FROM metrics
             WHERE domain = ?
-        ", [$domain])->getRowArray();
+        ", [$today, $yesterday, $today, $year, $month, $year, $domain])->getRowArray();
 
         return [
             'today'      => (int) ($row['today'] ?? 0),
@@ -219,14 +235,16 @@ class MetricsModel extends Model
      */
     public function getDomainHitsByDay(string $domain, int $days = 30): array
     {
+        $cutoff = date('Y-m-d', strtotime("-{$days} days"));
+
         $rows = $this->db->query("
             SELECT DATE(created_at) AS day, COUNT(*) AS hits
             FROM metrics
             WHERE domain = ?
-            AND created_at >= CURDATE() - INTERVAL ? DAY
+            AND DATE(created_at) >= ?
             GROUP BY DATE(created_at)
             ORDER BY day ASC
-        ", [$domain, $days])->getResultArray();
+        ", [$domain, $cutoff])->getResultArray();
 
         $result = [];
         for ($i = $days - 1; $i >= 0; $i--) {

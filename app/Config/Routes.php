@@ -15,6 +15,7 @@ $routes->get('/admin/metrics', 'Admin\Metrics::index');
 $routes->get('/admin/metrics/domains', 'Admin\Metrics::domains');
 $routes->get('/admin/metrics/domain/(:any)', 'Admin\Metrics::domain/$1');
 $routes->post('/admin/metrics/domain/(:any)/delete', 'Admin\Metrics::deleteDomain/$1');
+$routes->post('/admin/metrics/delete', 'Admin\Metrics::deleteSelected');
 $routes->get('/admin/reset', 'Admin\Reset::index');
 $routes->post('/admin/reset', 'Admin\Reset::reset');
 

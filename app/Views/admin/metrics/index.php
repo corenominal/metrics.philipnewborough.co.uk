@@ -70,10 +70,21 @@
     <div class="card border-0 bg-dark-subtle">
         <div class="card-body p-0">
             <?php if (!empty($hits)): ?>
+            <div class="d-flex justify-content-end p-3">
+                <button type="button" class="btn btn-sm btn-outline-danger" id="delete-selected-btn" data-url="/admin/metrics/delete" disabled>
+                    <i class="bi bi-trash me-1"></i> Delete Selected
+                </button>
+            </div>
+
             <div class="table-responsive">
                 <table class="table table-sm table-hover mb-0 align-middle">
                     <thead class="table-dark">
                         <tr>
+                            <th style="width:1px" class="ps-3 text-center">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="select-all-hits">
+                                </div>
+                            </th>
                             <th class="ps-3">#</th>
                             <th>Time</th>
                             <th>Domain</th>
@@ -86,7 +97,12 @@
                     </thead>
                     <tbody>
                         <?php foreach ($hits as $hit): ?>
-                        <tr>
+                        <tr data-hit-id="<?= $hit['id'] ?>">
+                            <td class="ps-3 text-center small">
+                                <div class="form-check">
+                                    <input class="form-check-input hit-select" type="checkbox" value="<?= $hit['id'] ?>" id="hit-<?= $hit['id'] ?>">
+                                </div>
+                            </td>
                             <td class="ps-3 text-secondary small"><?= $hit['id'] ?></td>
                             <td class="text-secondary small text-nowrap">
                                 <?= esc(date('d M Y H:i', strtotime($hit['created_at']))) ?>
@@ -142,6 +158,30 @@
         </div>
     </div>
 
+</div>
+
+<!-- Delete selected confirmation modal -->
+<div class="modal fade" id="delete-selected-modal" tabindex="-1" aria-labelledby="delete-selected-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark">
+            <div class="modal-header">
+                <h5 class="modal-title" id="delete-selected-modal-label">
+                    <i class="bi bi-trash me-2 text-danger"></i>Delete Selected Records
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>You are about to permanently delete <strong id="delete-selected-count">0</strong> selected hit record(s).</p>
+                <p class="mb-0 text-danger-emphasis">This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="delete-selected-confirm-btn">
+                    <i class="bi bi-trash me-1"></i> Delete Selected
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <?= $this->endSection() ?>

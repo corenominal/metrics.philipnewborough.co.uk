@@ -100,4 +100,34 @@ class Metrics extends BaseController
             'deleted' => $deleted,
         ]);
     }
+
+    /**
+     * Delete selected hit records by ID (bulk delete).
+     */
+    public function deleteSelected()
+    {
+        $model = new MetricsModel();
+
+        $json = $this->request->getJSON(true);
+        $ids = [];
+
+        if (!empty($json) && isset($json['ids']) && is_array($json['ids'])) {
+            $ids = array_map('intval', $json['ids']);
+        } else {
+            $post = $this->request->getPost('ids');
+            if (is_array($post)) {
+                $ids = array_map('intval', $post);
+            }
+        }
+
+        if (empty($ids)) {
+            return $this->response->setJSON(['status' => 'error', 'message' => 'No IDs provided']);
+        }
+
+        // Use model delete which accepts array of IDs
+        $model->delete($ids);
+        $deleted = $model->db->affectedRows();
+
+        return $this->response->setJSON(['status' => 'success', 'deleted' => $deleted]);
+    }
 }
